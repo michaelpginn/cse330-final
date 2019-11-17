@@ -3,7 +3,7 @@ Group Members:
 - Michael Ginn, 464974
 - Katie Lund, 465784
 
-# Rubric:
+# Project:
 Project: a video chat service that matches people with a "random" user also online (similar to something like Omegle). 
 
 # Rubric:
