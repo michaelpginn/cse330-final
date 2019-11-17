@@ -4,7 +4,7 @@ Group Members:
 - Katie Lund, 465784
 
 # Project:
-Project: a video chat service that matches people with a "random" user also online (similar to something like Omegle). 
+A video chat service that matches people with a "random" user also online (similar to something like Omegle). 
 
 # Rubric:
 **Rubric turned in on time (5 points)**  
