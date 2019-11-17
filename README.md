@@ -4,6 +4,9 @@ Group Members:
 - Katie Lund, 465784
 
 # Rubric:
+Project: a video chat service that matches people with a "random" user also online (similar to something like Omegle). 
+
+# Rubric:
 **Rubric turned in on time (5 points)**  
 **Languages/Frameworks used (20 points)**  
 - 10 - React frontend
