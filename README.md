@@ -28,3 +28,4 @@ A video chat service that matches people with a "random" user also online (simil
 
 
 
+Approved by James Hu 11/17/2019
