@@ -1,0 +1,22 @@
+{
+    "name": "CSE 330 AWS Instance",
+    "host": "ec2-18-216-4-66.us-east-2.compute.amazonaws.com",
+    "protocol": "sftp",
+    "port": 22,
+    "username": "mginn",
+    "privateKeyPath": "~/.ssh/id_rsa",
+    "remotePath": "/home/mginn/finalproject",
+    "uploadOnSave": true,
+    "ignore": [
+        ".vscode",
+        ".git",
+        ".DS_Store",
+        "hfs/node_modules/",
+        "hfs/public/",
+        "hfs/src/",
+        "hfs/package.json",
+        "hfs/package-lock.json",
+        "hfs/README.md",
+        "hfs/.gitignore"
+    ]
+}
