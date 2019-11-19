@@ -1,0 +1,23 @@
+{
+  "name": "creativeproject-creativeproject-ginnlund",
+  "version": "1.0.0",
+  "description": "Group Members:  - Michael Ginn, 464974 - Katie Lund, 465784",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cse330-fall-2019/creativeproject-creativeproject-ginnlund.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cse330-fall-2019/creativeproject-creativeproject-ginnlund/issues"
+  },
+  "homepage": "https://github.com/cse330-fall-2019/creativeproject-creativeproject-ginnlund#readme",
+  "dependencies": {
+    "mime": "^2.4.4",
+    "socket.io": "^2.3.0"
+  }
+}
