@@ -1,0 +1,27 @@
+"event_name", (param1, param2, etc)
+
+
+EVENTS FOR CLIENT TO SEND
+
+"set_username", (username, errorFunc:(error:String)=>{})
+Called by client to set username for current user. Takes a callback function which the server passes a string if there is an error. Error could be 1) username is taken
+Usage: socket.emit("set_username", (error)=>{if (error) ...}). If username is taken keep trying.
+
+"find_room", (errorFunc:(error:String)=>{})
+Called by client to find a new room for the user. Should be sent when the user first logs in or after they end a video chat with somebody else. Should call room_changed for the two people who have been matched. 
+(I guess one person can stay in the room they're in and the other person can try to match to a new room? How can we call find_room for only one person?)
+
+"send_message", (message)
+Called by client to send a message in the current text chat. Will call new_message for the video chat partners.
+
+EVENTS FOR CLIENT TO RESPOND TO
+
+"room_changed", (users[])
+Called when the current user's current video chat room is changed. Returns the users in the room so they can be displayed to both users. Should clear all messages currently displayed.
+
+"new_message", (messagetext, senderUsername)
+Called when a new message is sent in the current room. 
+
+"room_members_changed", (members[])
+Called when the current members of the room changes. Will be called after ending a video call (both screens should say "searching for a new partner" while one of the members[] is null) and once a match has been found...
+
