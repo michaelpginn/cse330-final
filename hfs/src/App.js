@@ -26,7 +26,7 @@ function App() {
           
             {/* Connect to a room with a name and optional password */}
             <SWRTC.Room name="test" >
-              {props => {
+              { () => {
                 return <div>oop</div>
               }}
             </SWRTC.Room>

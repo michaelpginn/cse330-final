@@ -16,7 +16,7 @@ Called by client to send a message in the current text chat. Will call new_messa
 
 EVENTS FOR CLIENT TO RESPOND TO
 
-"room_changed", (users[])
+"room_changed", (users[], roomId)
 Called when the current user's current video chat room is changed. Returns the users in the room so they can be displayed to both users. Should clear all messages currently displayed.
 
 "new_message", (messagetext, senderUsername)
