@@ -1,5 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Provider } from 'react-redux';
+import * as SWRTC from '@andyet/simplewebrtc';
+import Haircheck from "./haircheck"
 
 export default class VideoScreen extends React.Component {
     constructor(props) {
@@ -14,6 +17,6 @@ export default class VideoScreen extends React.Component {
     render() {
         //const { switchPage, user } = this.props;
         //const { currentContent, event } = this.state;
-        return (<div></div>);
+        return (<div><Haircheck/></div>);
     }
 }

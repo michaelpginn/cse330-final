@@ -1,6 +1,8 @@
 import React from "react";
 import * as SWRTC from '@andyet/simplewebrtc';
 import openSocket from 'socket.io-client';
+//import { Pages } from "../Constants";
+import MainScreen from '../Pages/mainscreen';
 
 export default class FriendSimulatorApp extends React.Component{
     constructor(props) {
@@ -32,7 +34,7 @@ export default class FriendSimulatorApp extends React.Component{
                 {connected ? (
                     <SWRTC.Room name="test" >
                         {() => {
-                            return <div>oop</div>
+                            return <MainScreen/>
                         }}
                     </SWRTC.Room>)
                     :
