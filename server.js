@@ -40,7 +40,7 @@ console.log('Server running at http://localhost:3456/');
 
 let users = []; // [{username, socketId, currentRoomId}]
 // Not sure if we need the rooms array
-let rooms = []; // [{id, user1, user2}]
+let rooms = []; // [{id, users:[]}]
 let currId = 0;
 
 
@@ -48,6 +48,7 @@ let currId = 0;
 var io = socketio.listen(app);
 io.sockets.on("connection", function (socket) {
 	console.log("connected to socket");
+
 	// set the username for the current socket
 	socket.on(events.Events.SET_USERNAME, function (username, errorFunc) {
 		if (users.find(user => user.username === username)) {
@@ -58,51 +59,72 @@ io.sockets.on("connection", function (socket) {
 		}
 	});
 
-	// Find a room
-	socket.on(events.Events.FIND_ROOM, function (errorFunc) {
-		let currentUser = users.find(user => user.socketId === socket.id);
+	// Exit room - called when you click the "next person" button or disconnect
+	// Removes you and the other user from your current room (if it exists) and deletes the current room
+	socket.on(events.Events.EXIT_ROOM, function (errorFunc){
+		const currentUser = users.find(user => user.socketId === socket.id);
 		if (!currentUser) {
 			errorFunc("User has been logged out.");
 			return;
 		}
 
-		let isUser1 = false;
-		let user1 = rooms.filter(room => room.user1 === currentUser.username);
-		if (user1) {
-			isUser1 = true;
-			// They were user1 in their room: they get to stay
-			// Need to kick the other user
+		const currentRoom = rooms.find(room => room.id === currentUser.currentRoomId);
+		if (!currentRoom) {
+			errorFunc("User is not currently in a room.")
+			return;
 		}
-		else {
-			// Randomly find an empty room for the user
-			let openRooms = rooms.filter(room => room.user1 === null || room.user2 === null);
-			let randomIndex = Math.floor(Math.random() * openRooms.length);
-			let room = openRooms[randomIndex];
-			if (room) {
-				// remove user from old room
-				let oldRoom = rooms.find(room => room.id === currentUser.currentRoomId);
-				if (oldRoom) {
-					oldRoom.user2 = null;
-					socket.leave(oldRoom.id);
-					let usernames = [oldRoom.user1, oldRoom.user2];
-					io.to(oldRoom.id).emit(events.Events.ROOM_MEMBERS_CHANGED, usernames);
-				}
 
-				// we are good to go, add them to the room
-				room.user2 = currentUser.username;
-				socket.join(room.id);
-				currentUser.currentRoomId = room.id;
-				let usernames = [room.user1, room.user2];
-				socket.emit(events.Events.ROOM_CHANGED, usernames);
-				io.to(room.id).emit(events.Events.ROOM_MEMBERS_CHANGED, usernames);
-			} else {
-				// make a new room for the person to sit in by themself for now
-				rooms.push({ id: currId, user1: currentUser, user2: null});
-				currId = currId + 1;
-				let usernames = [room.user1, room.user2];
-				io.to(room.id).emit(events.Events.ROOM_MEMBERS_CHANGED, usernames);
-			}
+		// find the other user in the room
+		const otherUser = currentRoom.users.find(user => user.username !== currentUser.username);
+
+		// remove both from the room
+		currentUser.currentRoomId = null;
+		otherUser.currentRoomId = null;
+
+		// delete the room
+		rooms = rooms.filter(room => room.id !== currentRoom.id);
+
+		// notify both users
+		io.to(currentUser.socketId).emit(events.Events.ROOM_CHANGED, null, null);
+		io.to(otherUser.socketId).emit(events.Events.ROOM_CHANGED, null, null);
+	})
+
+	// Find a room for a user who's not in one already.
+	socket.on(events.Events.FIND_ROOM, function (errorFunc) {
+		const currentUser = users.find(user => user.socketId === socket.id);
+		if (!currentUser) {
+			errorFunc("User has been logged out.");
+			return;
 		}
+
+		if (currentUser.currentRoomId) {
+			errorFunc("User is already in a room.");
+			return;
+		}
+
+		let openUsers = [];
+
+		while (!openUsers || openUsers.count === 0) {
+
+			// find another user who is not in a room yet (and not the current user)
+			openUsers = users.filter(user => user.currentRoomId === null && user.username !== currentUser.username);
+
+		}
+		
+		// randomly select one of these unmatched users
+		const randomIndex = Math.floor(Math.random * users.length);
+		const newChatPartner = openUsers[randomIndex];
+
+		// create the new room for both users, the id is their usernames squished together
+		const newRoomId = currentUser.username + newChatPartner.username;
+		const newRoom = { id: newRoomId, users: [currentUser, newChatPartner] };
+		rooms.push(newRoom);
+		currentUser.currentRoomId = newRoomId;
+		newChatPartner.currentRoomId = newRoomId;
+
+		// tell both users that they are in a room
+		io.to(currentUser.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, newChatPartner.username);
+		io.to(newChatPartner.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, currentUser.username);
 	})
 
 	// Send a message
@@ -112,17 +134,37 @@ io.sockets.on("connection", function (socket) {
 			errorFunc("User has been logged out.");
 			return;
 		}
+		// get the current room
+		const currentRoom = rooms.find(room => room.id === currentUser.currentRoomId);
+		if (!currentRoom) {
+			errorFunc("User is not currently in a room.");
+			return;
+		}
+
 		// send it to the current room
-		io.to(currentUser.currentRoomId).emit(events.Events.NEW_MESSAGE, message);
+		currentRoom.users.forEach(user => {
+			io.to(user.socketId).emit(events.Events.NEW_MESSAGE, message, currentUser.username);
+		});
 	});
 
+	// send image message
 	socket.on(events.Events.SEND_IMAGE_MESSAGE, function (imageDataUrl, errorFunc) {
 		let currentUser = users.find(user => user.socketId === socket.id);
 		if (!currentUser) {
 			errorFunc("User has been logged out.");
 			return;
 		}
-		io.to(currentUser.currentRoomId).emit(events.Events.NEW_IMAGE_MESSAGE, imageDataUrl, currentUser.username);
+		// get the current room
+		const currentRoom = rooms.find(room => room.id === currentUser.currentRoomId);
+		if (!currentRoom) {
+			errorFunc("User is not currently in a room.");
+			return;
+		}
+
+		// send it to the current room
+		currentRoom.users.forEach(user => {
+			io.to(user.socketId).emit(events.Events.NEW_IMAGE_MESSAGE, imageDataUrl, currentUser.username);
+		});
 	});
 
 	socket.on(events.Events.DISCONNECT, function (reason) {
@@ -132,15 +174,17 @@ io.sockets.on("connection", function (socket) {
 			if (currentUser) {
 				let oldRoom = rooms.find(room => room.id === currentUser.currentRoomId);
 				if (oldRoom) {
-					if (oldRoom.user1 === currentUser) {
-						oldRoom.user1 = null;
-					}
-					else {
-						oldRoom.user2 = null;
-					}
-					socket.leave(oldRoom.id);
-					let usernames = [oldRoom.user1, oldRoom.user2];
-					io.to(oldRoom.id).emit(events.Events.ROOM_MEMBERS_CHANGED, usernames);
+					// find the other user in the room
+					const otherUser = oldRoom.users.find(user => user.username !== currentUser.username);
+
+					// remove him from the room
+					otherUser.currentRoomId = null;
+
+					// delete the room
+					rooms = rooms.filter(room => room.id !== oldRoom.id);
+
+					// notify both users
+					io.to(otherUser.socketId).emit(events.Events.ROOM_CHANGED, null, null);
 				}
 				users = users.filter(user => user.socketId !== socket.id);
 			}
