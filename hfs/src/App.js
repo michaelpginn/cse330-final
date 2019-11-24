@@ -20,7 +20,7 @@ function App() {
           <SWRTC.Connected>
             <h1>Conneected!</h1>
             {/* Request user's info */}
-            <SWRTC.RequestUserMedia audio video auto />
+            <SWRTC.RequestUserMedia audio video auto share/>
 
             {/* Enable playing remote audio. */}
             <SWRTC.RemoteAudioPlayer />
