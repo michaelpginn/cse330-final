@@ -1,8 +1,9 @@
 // Require the packages we will use:
 const http = require("http"),
 	socketio = require("socket.io"),
-    fs = require("fs"),
-    mime = require('mime');
+	fs = require("fs"),
+	mime = require('mime'),
+	events = require("./events");
     
 // Listen for HTTP connections.  This is essentially a miniature static file server that only serves our one file, client.html:
 var app = http.createServer(function(req, resp){
@@ -46,6 +47,7 @@ let currId = 0;
 // Do the Socket.IO magic:
 var io = socketio.listen(app);
 io.sockets.on("connection", function (socket) {
+	console.log("connected to socket");
 	// set the username for the current socket
 	socket.on(events.Events.SET_USERNAME, function (username, errorFunc) {
 		if (users.find(user => user.username === username)) {

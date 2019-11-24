@@ -7,21 +7,21 @@ EVENTS FOR CLIENT TO SEND
 Called by client to set username for current user. Takes a callback function which the server passes a string if there is an error. Error could be 1) username is taken
 Usage: socket.emit("set_username", (error)=>{if (error) ...}). If username is taken keep trying.
 
+"exit_room", (errorFunc:(error:String)=>{})
+Called by client to exit their current room. Should be sent when the user chooses to end the current chat and try to find a new one. Should quickly call "room_changed" with no roomid to indicate the user is not in a room at all. From the client side, when the user is not in a room, immediately start searching for a new one by waiting a second and then calling "find_room".
+
 "find_room", (errorFunc:(error:String)=>{})
-Called by client to find a new room for the user. Should be sent when the user first logs in or after they end a video chat with somebody else. Should call room_changed for the two people who have been matched. 
-(I guess one person can stay in the room they're in and the other person can try to match to a new room? How can we call find_room for only one person?)
+Called by client to find a new room for the user. Should be sent when the user first logs in or when they are in a state of no room. Should call room_changed for the two people who have been matched. 
 
 "send_message", (message)
 Called by client to send a message in the current text chat. Will call new_message for the video chat partners.
 
 EVENTS FOR CLIENT TO RESPOND TO
 
-"room_changed", (users[], roomId)
-Called when the current user's current video chat room is changed. Returns the users in the room so they can be displayed to both users. Should clear all messages currently displayed.
+"room_changed", (roomId, otherUserName)
+Called when the current user's current video chat room is changed. Returns the id of the room and the name of the other user in the room so they can be displayed to both users. Should clear all messages currently displayed. It should only occur when a user is not in a room.
 
 "new_message", (messagetext, senderUsername)
 Called when a new message is sent in the current room. 
 
-"room_members_changed", (members[])
-Called when the current members of the room changes. Will be called after ending a video call (both screens should say "searching for a new partner" while one of the members[] is null) and once a match has been found...
 
