@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { Provider } from 'react-redux';
 import * as SWRTC from '@andyet/simplewebrtc';
+import MainScreen from "/MainScreen";
 
 const API_KEY = "9efd1b765b3af86fbdf1cd42";
 const CONFIG_URL = `https://api.simplewebrtc.com/config/guest/${API_KEY}`;
@@ -23,11 +24,11 @@ function App() {
 
             {/* Enable playing remote audio. */}
             <SWRTC.RemoteAudioPlayer />
-          
+
             {/* Connect to a room with a name and optional password */}
             <SWRTC.Room name="test" >
               { () => {
-                return <div>oop</div>
+                return <MainScreen />
               }}
             </SWRTC.Room>
           </SWRTC.Connected>
