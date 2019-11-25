@@ -16,9 +16,12 @@ Called by client to find a new room for the user. Should be sent when the user f
 "send_message", (message)
 Called by client to send a message in the current text chat. Will call new_message for the video chat partners.
 
+"rate_user", (rating)
+Rating out of 5, updates user rating and number of total ratings
+
 EVENTS FOR CLIENT TO RESPOND TO
 
-"room_changed", (roomId, otherUserName)
+"room_changed", (roomId, user:{username, rating}) //UPDATE THIS TO INCLUDE RATING
 Called when the current user's current video chat room is changed. Returns the id of the room and the name of the other user in the room so they can be displayed to both users. Should clear all messages currently displayed. It should only occur when a user is not in a room.
 
 "new_message", (messagetext, senderUsername)

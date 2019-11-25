@@ -38,7 +38,7 @@ var app = http.createServer(function(req, resp){
 app.listen(3456);
 console.log('Server running at http://localhost:3456/');
 
-let users = []; // [{username, socketId, currentRoomId}]
+let users = []; // [{username, socketId, currentRoomId, totalPoints, totalRatings}]
 // Not sure if we need the rooms array
 let rooms = []; // [{id, users:[]}]
 let currId = 0;
@@ -122,9 +122,15 @@ io.sockets.on("connection", function (socket) {
 		currentUser.currentRoomId = newRoomId;
 		newChatPartner.currentRoomId = newRoomId;
 
+		let currentUserRating = currentUser.totalPoints / currentUser.totalRatings;
+		let currentUserRate = { username: currentUser.username, rating: currentUserRating }
+		
+		let currentUserRating = newChatPartner.totalPoints / newChatPartner.totalRatings;
+		let newChatPartnerRate = { username: newChatPartner.username, rating: newChatRating }
+
 		// tell both users that they are in a room
-		io.to(currentUser.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, newChatPartner.username);
-		io.to(newChatPartner.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, currentUser.username);
+		io.to(currentUser.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, newChatPartnerRate);
+		io.to(newChatPartner.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, currentUserRate);
 	})
 
 	// Send a message
@@ -165,6 +171,24 @@ io.sockets.on("connection", function (socket) {
 		currentRoom.users.forEach(user => {
 			io.to(user.socketId).emit(events.Events.NEW_IMAGE_MESSAGE, imageDataUrl, currentUser.username);
 		});
+	});
+
+	socket.on(events.Events.RATE_USER, function (rating) {
+		let currentUser = users.find(user => user.socketId === socket.id);
+		if (!currentUser) {
+			errorFunc("User has been logged out.");
+			return;
+		}
+		// get the current room
+		const currentRoom = rooms.find(room => room.id === currentUser.currentRoomId);
+		if (!currentRoom) {
+			errorFunc("User is not currently in a room.");
+			return;
+		}
+
+		let otherUser = currentRoom.users.find(user => user.username !== currentUser.username);
+		otherUser.totalPoints = otherUser.totalPoints + rating;
+		otherUser.totalRatings = otherUser.totalRatings + 1;
 	});
 
 	socket.on(events.Events.DISCONNECT, function (reason) {

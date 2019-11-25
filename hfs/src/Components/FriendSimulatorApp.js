@@ -2,7 +2,7 @@ import React from "react";
 import * as SWRTC from '@andyet/simplewebrtc';
 import openSocket from 'socket.io-client';
 import ChatWrapper from "./chatwrapper";
-import VideoScreen from "./videoscreen";
+import VideoScreen from "./videoscreen";  
 
 export default class FriendSimulatorApp extends React.Component{
     constructor(props) {
