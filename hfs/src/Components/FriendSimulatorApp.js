@@ -5,6 +5,7 @@ import openSocket from 'socket.io-client';
 import ChatWrapper from "./chatwrapper";
 import VideoScreen from "./videoscreen";
 import "./components.css";
+import Header from "./header";
 
 export default class FriendSimulatorApp extends React.Component{
     constructor(props) {
@@ -15,7 +16,7 @@ export default class FriendSimulatorApp extends React.Component{
     }
     componentDidMount = async () => {
         try {
-            this.socket = openSocket('http://ec2-18-216-4-66.us-east-2.compute.amazonaws.com:3456');
+            this.socket = openSocket('https://ec2-18-216-4-66.us-east-2.compute.amazonaws.com:8000');
             this.socket.on('connect', () => { this.setState({connected: true}) })
         } catch (error) {
             console.log(error);
@@ -26,22 +27,24 @@ export default class FriendSimulatorApp extends React.Component{
     render() {
         const { connected } = this.state;
         return (
-        
-            <React.Fragment>
-                {/* Connect to a room with a name and optional password */}
-                {connected ? (
-                    <div>
-                        <SWRTC.Room name="test" >
-                            {() => {
-                                return <VideoScreen />
-                            }}
-                        </SWRTC.Room>
-                        <ChatWrapper />
-                    </div>)
-                    :
-                    <div>Could not connect to socket, server may not be running.</div>}
-                
-            </React.Fragment>
+            <div style={{ display: "flex", height: "100vh", flexDirection: "column" }}>
+                <Header />
+                <div style={{ display: "flex" }}>
+                    {/* Connect to a room with a name and optional password */}
+                    {connected ? (
+                        <div>
+                            <SWRTC.Room name="test" >
+                                {() => {
+                                    return <VideoScreen />
+                                }}
+                            </SWRTC.Room>
+                        </div>)
+                        :
+                        <div>Could not connect to socket, server may not be running.</div>
+                    }
+                    <ChatWrapper />
+                </div>
+            </div>
             
 
         );
