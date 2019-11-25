@@ -6,6 +6,7 @@ import ChatWrapper from "./chatwrapper";
 import VideoScreen from "./videoscreen";
 import "./components.css";
 import Header from "./header";
+import serverUrl from "../Instance"
 
 export default class FriendSimulatorApp extends React.Component{
     constructor(props) {
@@ -16,7 +17,7 @@ export default class FriendSimulatorApp extends React.Component{
     }
     componentDidMount = async () => {
         try {
-            this.socket = openSocket('https://ec2-18-216-4-66.us-east-2.compute.amazonaws.com:8000');
+            this.socket = openSocket(serverUrl);
             this.socket.on('connect', () => { this.setState({connected: true}) })
         } catch (error) {
             console.log(error);
