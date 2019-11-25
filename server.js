@@ -1,12 +1,17 @@
 // Require the packages we will use:
-const http = require("http"),
+const https = require("https"),
 	socketio = require("socket.io"),
 	fs = require("fs"),
 	mime = require('mime'),
 	events = require("./events");
-    
+	
+const options = {
+	key: fs.readFileSync('key.pem'),
+	cert: fs.readFileSync('cert.pem')
+};
+
 // Listen for HTTP connections.  This is essentially a miniature static file server that only serves our one file, client.html:
-var app = http.createServer(function(req, resp){
+var app = https.createServer(options, function(req, resp){
 	// This callback runs when a new connection is made to our HTTP server.
 	
 	// Modified from https://www.dotnetcurry.com/nodejs/1144/nodejs-html-static-pages-website
@@ -35,13 +40,12 @@ var app = http.createServer(function(req, resp){
 		});
 	}
 });
-app.listen(3456);
-console.log('Server running at http://localhost:3456/');
+app.listen(8000);
+console.log('Server running at http://localhost:8000/');
 
 let users = []; // [{username, socketId, currentRoomId, totalPoints, totalRatings}]
 // Not sure if we need the rooms array
 let rooms = []; // [{id, users:[]}]
-let currId = 0;
 
 
 // Do the Socket.IO magic:
