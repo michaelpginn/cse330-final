@@ -17,6 +17,7 @@ export default function VideoScreen () {
                     return <MediaPreview video={latestVideo} audio={latestAudio} />;
                 }}
             />
+            <div style={{height: 1}}/>
             <RemoteMediaList
                 audio={true}
                 video={true}

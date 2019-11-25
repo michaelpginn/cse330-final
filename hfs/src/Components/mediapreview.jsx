@@ -1,29 +1,39 @@
-import { Video, VolumeMeter } from '@andyet/simplewebrtc';
-//import MicIcon from 'material-icons-svg/components/baseline/Mic';
 import React from 'react';
+import { Video, VolumeMeter, Volume } from '@andyet/simplewebrtc';
+import styled from 'styled-components';
 
-const NoVideo = () => (
-    <p>No video selected</p>
-);
+import "./components.css";
+
+const NoVideo = styled.div({
+    backgroundColor: "#333",
+    width: '100%',
+    height: '100%'
+})
+
+const Container = styled.div({
+    height: '50%',
+    '& video': {
+        width: '100%',
+        height: '100%',
+        objectFit: 'fill',
+        backgroundColor: '#262a2c'
+    }
+});
 
 // MediaPreview displays a camera feed if video is provided, and a VolumeMeter
 // if audio is provided.
 const MediaPreview = ({ audio, video }) => (
-    <div>
+    <Container>
         {video && video.loaded ? <Video media={video} /> : <NoVideo />}
-        {audio ? (
+        {/* {audio ? (
             <VolumeMeter
                 media={audio}
                 render={({ volume, speaking }) => (
-                    <div>Videeeeeee</div>
-                    //<Volume>
-                    //<Meter buckets={20} volume={volume + 100} speaking={speaking} />
-                    //<MicIcon />
-                    //</Volume>
+                    <VolumeMeter buckets={20} volume={volume + 100} speaking={speaking} />
                 )}
             />
-        ) : null}
-    </div>
+        ) : null} */}
+    </Container>
 );
 
 export default MediaPreview;
