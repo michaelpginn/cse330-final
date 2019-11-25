@@ -3,3 +3,5 @@ hfs/node_modules
 package-lock.json
 sftp.json
 hfs/package-lock.json
+cert.pem
+key.pem

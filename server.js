@@ -5,6 +5,8 @@ const https = require("https"),
 	mime = require('mime'),
 	events = require("./events");
 	
+// https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/
+
 const options = {
 	key: fs.readFileSync('key.pem'),
 	cert: fs.readFileSync('cert.pem')
