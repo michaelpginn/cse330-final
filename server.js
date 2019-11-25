@@ -125,7 +125,7 @@ io.sockets.on("connection", function (socket) {
 		let currentUserRating = currentUser.totalPoints / currentUser.totalRatings;
 		let currentUserRate = { username: currentUser.username, rating: currentUserRating }
 		
-		let currentUserRating = newChatPartner.totalPoints / newChatPartner.totalRatings;
+		let newChatRating = newChatPartner.totalPoints / newChatPartner.totalRatings;
 		let newChatPartnerRate = { username: newChatPartner.username, rating: newChatRating }
 
 		// tell both users that they are in a room
