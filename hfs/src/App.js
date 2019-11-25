@@ -18,7 +18,6 @@ function App() {
             <h1>Connecting...</h1>
           </SWRTC.Connecting>
           <SWRTC.Connected>
-            <h1>Conneected!</h1>
             {/* Request user's info */}
             <SWRTC.RequestUserMedia audio video auto share/>
 
