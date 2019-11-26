@@ -2,7 +2,8 @@ import React from "react";
 import { LocalMediaList, RemoteMediaList } from '@andyet/simplewebrtc';
 import MediaPreview from './mediapreview';
 
-export default function VideoScreen () {
+export default function VideoScreen() {
+
     return (
         <div>
             <LocalMediaList

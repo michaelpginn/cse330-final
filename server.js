@@ -49,7 +49,6 @@ let users = []; // [{username, socketId, currentRoomId, totalPoints, totalRating
 // Not sure if we need the rooms array
 let rooms = []; // [{id, users:[]}]
 
-
 // Do the Socket.IO magic:
 var io = socketio.listen(app);
 io.sockets.on("connection", function (socket) {
