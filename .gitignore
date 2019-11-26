@@ -5,3 +5,4 @@ sftp.json
 hfs/package-lock.json
 cert.pem
 key.pem
+hfs/src/Instance.js
