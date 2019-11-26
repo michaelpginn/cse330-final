@@ -47,16 +47,22 @@ export default class FriendSimulatorApp extends React.Component{
         setTimeout(() => { this.setState({ error: null }) }, 4000)
     }
 
+    send_message = (messageText) => {
+        this.socket.emit("send_message", messageText, this.errorFunc);
+    }
+
     render() {
         const { connected, currentUsername, error } = this.state;
+        let currentRoom = { users: [currentUsername, null], messages: [] };
         return (
             <div style={{ display: "flex", height: "100vh", flexDirection: "column", }}>
                 <Header />
                 <div style={{ display: "flex", alignItems: "stretch", flex: 1 }}>
                     {currentUsername ? (
-                        <div>
+                        <React.Fragment>
+                            <div>
                             <h1>Hey, {currentUsername}!</h1>
-                            {/* Connect to a room with a name and optional password */}
+                            {/* Connect to a room with a name */}
                             {connected ? (
 
                                 <SWRTC.Room name="test" >
@@ -67,9 +73,10 @@ export default class FriendSimulatorApp extends React.Component{
                             )
                                 :
                                 <div>Could not connect to socket, server may not be running.</div>
-                            }
-                            <ChatWrapper />
-                        </div>
+                                }
+                            </div>
+                            <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} />
+                        </React.Fragment>
                     )
                         : (
                             <div>

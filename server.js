@@ -139,7 +139,7 @@ io.sockets.on("connection", function (socket) {
 	})
 
 	// Send a message
-	socket.on(events.Events.SEND_MESSAGE, function (message, recipientUsername, errorFunc) {
+	socket.on(events.Events.SEND_MESSAGE, function (message, errorFunc) {
 		let currentUser = users.find(user => user.socketId === socket.id);
 		if (!currentUser) {
 			errorFunc("User has been logged out.");
