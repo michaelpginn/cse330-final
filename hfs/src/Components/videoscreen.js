@@ -5,7 +5,7 @@ import MediaPreview from './mediapreview';
 export default function VideoScreen() {
 
     return (
-        <div>
+        <div style={{width: "62vh"}}>
             <LocalMediaList
                 screen={false}
                 render={({ media }) => {

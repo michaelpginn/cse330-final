@@ -76,9 +76,10 @@ export default class FriendSimulatorApp extends React.Component{
         this.socket.emit("exit_room", this.errorFunc);
     };
 
+    // we only have to check once. If we can't find a user, the next time someone becomes free, they will call this function and hopefully match with us. It's not super fair (someone could be stuck for a while with no partner) but it works for us.
     find_room = () => {
         console.log("finding room....")
-        this.socket.emit("find_room", this.roomErrorFunc);
+        this.socket.emit("find_room", this.errorFunc);
     };
 
     rate_user = rating => {
@@ -97,15 +98,15 @@ export default class FriendSimulatorApp extends React.Component{
         }
     };
 
-    roomErrorFunc = (error, code) => {
-        const { currentRoom } = this.state;
-        if (code === 1 && currentRoom === null) {
-            // we could not find any unmatched users so we will try again in 300 ms
-            this.sleep(1000).then(() => { this.find_room() });
-        } else {
-            this.errorFunc(error);
-        }
-    }
+    // roomErrorFunc = (error, code) => {
+    //     const { currentRoom } = this.state;
+    //     if (code === 1 && currentRoom === null) {
+    //         // we could not find any unmatched users so we will try again in 300 ms
+    //         this.sleep(1000).then(() => { this.find_room() });
+    //     } else {
+    //         this.errorFunc(error);
+    //     }
+    // }
 
     errorFunc = error => {
         console.log(error);
@@ -122,19 +123,18 @@ export default class FriendSimulatorApp extends React.Component{
                     {currentUsername ? (
                         <React.Fragment>
                             {connected ? (
-                                <div>
-                                    <div>
-                                        <h1>Hey, {currentUsername}!</h1>
-                                        {/* Connect to a room with a name */}
+                                <React.Fragment>
+                                    
+                                    {/* Connect to a room with a name */}
                          
-                                        <SWRTC.Room name={currentRoom ? currentRoom.roomId : currentUsername} >
-                                            {() => {
-                                                return <VideoScreen />
-                                            }}
-                                        </SWRTC.Room>
-                                    </div>
+                                    <SWRTC.Room name={currentRoom ? currentRoom.roomId : currentUsername} >
+                                        {() => {
+                                            return <VideoScreen />
+                                        }}
+                                    </SWRTC.Room>
+                            
                                     <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} />
-                                </div>)
+                                </React.Fragment>)
                                 :
                                 (<div>Could not connect to socket, server may not be running.</div>)}
                         </React.Fragment>

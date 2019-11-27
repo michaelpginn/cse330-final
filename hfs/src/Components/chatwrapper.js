@@ -30,7 +30,7 @@ export default class ChatWrapper extends React.Component {
                         <ul>
                             {currentRoom.messages.map(message => (
                                 <li>
-                                    <text style={{ fontWeight: 'bold', }}>{message.senderUsername} : </text>
+                                    <text style={{ fontWeight: 'bold', }}>{message.senderUsername} : </text> {message.messageText}
                                 </li>
                             ))}
                         </ul>
