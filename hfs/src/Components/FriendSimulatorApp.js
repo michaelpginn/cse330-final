@@ -118,15 +118,13 @@ export default class FriendSimulatorApp extends React.Component{
         const { connected, currentUsername, error, currentRoom } = this.state;
         return (
             <div style={{ display: "flex", height: "100vh", flexDirection: "column", }}>
-                <Header />
+                <Header currentUsername={currentUsername}/>
                 <div style={{ display: "flex", alignItems: "stretch", flex: 1 }}>
                     {currentUsername ? (
                         <React.Fragment>
                             {connected ? (
-                                <React.Fragment>
-                                    
+                                <React.Fragment> 
                                     {/* Connect to a room with a name */}
-                         
                                     <SWRTC.Room name={currentRoom ? currentRoom.roomId : currentUsername} >
                                         {() => {
                                             return <VideoScreen />
