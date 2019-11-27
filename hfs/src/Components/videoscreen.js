@@ -13,8 +13,6 @@ export default function VideoScreen() {
                     const videoStreams = media.filter(m => m.kind === 'video');
                     const latestAudio = audioStreams[audioStreams.length - 1];
                     const latestVideo = videoStreams[videoStreams.length - 1];
-                    console.log(videoStreams);
-    
                     return <MediaPreview video={latestVideo} audio={latestAudio} />;
                 }}
             />
@@ -27,8 +25,6 @@ export default function VideoScreen() {
                     const videoStreams = media.filter(m => m.kind === 'video');
                     const latestAudio = audioStreams[audioStreams.length - 1];
                     const latestVideo = videoStreams[videoStreams.length - 1];
-                    console.log(videoStreams);
-    
                     return <MediaPreview video={latestVideo} audio={latestAudio} />;
                 }}
             />
