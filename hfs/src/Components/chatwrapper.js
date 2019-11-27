@@ -25,7 +25,7 @@ export default class ChatWrapper extends React.Component {
         return (
             <div>
                 {currentRoom &&
-                    <React.Fragment><h2>Chat Wiith: {currentRoom.users[0]} and {currentRoom.users[1]} </h2>
+                    <React.Fragment><h2>You're chatting with {currentRoom.otherUser.username}</h2>
                         <hr />
                         <ul>
                             {currentRoom.messages.map(message => (

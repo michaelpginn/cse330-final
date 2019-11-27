@@ -107,19 +107,18 @@ io.sockets.on("connection", function (socket) {
 			return;
 		}
 
-		let openUsers = [];
-
-		while (!openUsers || openUsers.count === 0) {
-
-			// find another user who is not in a room yet (and not the current user)
-			openUsers = users.filter(user => user.currentRoomId === null && user.username !== currentUser.username);
-
+		let openUsers = users.filter(user => user.currentRoomId === null && user.username !== currentUser.username);
+		if (openUsers.length === 0) {
+			// they wil have to try again soon
+			errorFunc("No open users", 1);
+			return;
 		}
 		
 		// randomly select one of these unmatched users
-		const randomIndex = Math.floor(Math.random * users.length);
+		const randomIndex = Math.floor(Math.random() * users.length);
 		const newChatPartner = openUsers[randomIndex];
 
+		console.log(randomIndex)
 		// create the new room for both users, the id is their usernames squished together
 		const newRoomId = currentUser.username + newChatPartner.username;
 		const newRoom = { id: newRoomId, users: [currentUser, newChatPartner] };
