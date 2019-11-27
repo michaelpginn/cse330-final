@@ -115,10 +115,11 @@ io.sockets.on("connection", function (socket) {
 		}
 		
 		// randomly select one of these unmatched users
-		const randomIndex = Math.floor(Math.random() * users.length);
+		const randomIndex = Math.floor(Math.random() * openUsers.length);
 		const newChatPartner = openUsers[randomIndex];
 
-		console.log(randomIndex)
+		console.log(openUsers);
+		console.log(randomIndex);
 		// create the new room for both users, the id is their usernames squished together
 		const newRoomId = currentUser.username + newChatPartner.username;
 		const newRoom = { id: newRoomId, users: [currentUser, newChatPartner] };
