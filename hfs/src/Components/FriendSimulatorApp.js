@@ -124,14 +124,24 @@ export default class FriendSimulatorApp extends React.Component{
                         <React.Fragment>
                             {connected ? (
                                 <React.Fragment> 
-                                    {/* Connect to a room with a name */}
-                                    <SWRTC.Room name={currentRoom ? currentRoom.roomId : currentUsername} >
-                                        {() => {
-                                            return <VideoScreen />
-                                        }}
-                                    </SWRTC.Room>
-                            
-                                    <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} />
+                                    {currentRoom ? (
+                                        <React.Fragment> 
+                                        {/* Connect to a room with a name */ }
+                                        {console.log("excuse me: " + currentRoom)}
+                                        <SWRTC.Room name={currentRoom ? currentRoom.roomId : currentUsername} >
+                                            {() => {
+                                                return <VideoScreen />
+                                            }}
+                                        </SWRTC.Room>
+
+                                        <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} />
+                                        </React.Fragment>
+                                 ) : 
+                                (
+                                    <div>Waiting to connect with another user...</div>
+                                )
+                                }
+                                    
                                 </React.Fragment>)
                                 :
                                 (<div>Could not connect to socket, server may not be running.</div>)}
