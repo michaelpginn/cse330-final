@@ -9,6 +9,7 @@ export default function VideoScreen() {
             <LocalMediaList
                 screen={false}
                 render={({ media }) => {
+                    console.log(media);
                     const audioStreams = media.filter(m => m.kind === 'audio');
                     const videoStreams = media.filter(m => m.kind === 'video');
                     const latestAudio = audioStreams[audioStreams.length - 1];
@@ -21,6 +22,7 @@ export default function VideoScreen() {
                 audio={true}
                 video={true}
                 render={({ media }) => {
+                    console.log(media);
                     const audioStreams = media.filter(m => m.kind === 'audio');
                     const videoStreams = media.filter(m => m.kind === 'video');
                     const latestAudio = audioStreams[audioStreams.length - 1];
