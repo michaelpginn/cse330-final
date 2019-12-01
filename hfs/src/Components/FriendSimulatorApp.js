@@ -49,7 +49,7 @@ export default class FriendSimulatorApp extends React.Component{
             // ask for a new chat partner
             this.sleep(1000).then(() => { this.find_room() });
         } else {
-            console.log("NEW ROOM");
+            console.log("NEW ROOM ID: ");
             console.log(roomId);
             this.setState({ currentRoom: { roomId, otherUser, messages: [] } });
         }
@@ -57,9 +57,8 @@ export default class FriendSimulatorApp extends React.Component{
 
     new_message = (messageText, senderUsername) => {
         const { currentRoom } = this.state;
-        const newMessage = { senderUsername, messageText }
-        const newRoom = { ...currentRoom, messages: [...currentRoom.messages, newMessage] }
-        console.log(newRoom);
+        const newMessage = { senderUsername, messageText };
+        const newRoom = { ...currentRoom, messages: [...currentRoom.messages, newMessage] };
         this.setState({ currentRoom: newRoom });
     };
 
@@ -126,20 +125,24 @@ export default class FriendSimulatorApp extends React.Component{
                                 <React.Fragment>
                                     {currentRoom ? (
                                         <React.Fragment>
+                                            {/* Request user's info */}
+                                            <SWRTC.RequestUserMedia audio video auto share />
                                             {/* Connect to a room with a name */}
-                                            {console.log("excuse me: " + currentRoom)}
-                                            <SWRTC.Room name={currentRoom ? currentRoom.roomId : currentUsername} >
-                                                {() => {
-                                                    return <VideoScreen />
+                                            <SWRTC.Room name={currentRoom.roomId} >
+                                                {({ room }) => {
+                                                    console.log("_______CURRENT ROOM_______");
+                                                    console.log(room);
+                                                    return <VideoScreen />;
                                                 }}
                                             </SWRTC.Room>
 
                                             <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} />
                                         </React.Fragment>
                                     ) :
-                                        (
-                                            <div>Waiting to connect with another user...</div>
-                                        )
+                                        <React.Fragment>
+                                            <div>Searching for chat partner...</div>
+                                            
+                                        </React.Fragment>
                                     }
                                     
                                 </React.Fragment>)

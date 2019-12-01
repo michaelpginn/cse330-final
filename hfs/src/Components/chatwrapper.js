@@ -20,8 +20,6 @@ export default class ChatWrapper extends React.Component {
     render() {
         const { currentRoom } = this.props;
         const { newMessage } = this.state;
-        console.log("CURRENTROOM")
-        console.log(currentRoom);
         return (
             <div>
                 {currentRoom &&
