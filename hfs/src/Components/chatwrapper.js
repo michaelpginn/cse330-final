@@ -21,18 +21,23 @@ export default class ChatWrapper extends React.Component {
         const { currentRoom } = this.props;
         const { newMessage } = this.state;
         return (
-            <div>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: 10 }}>
                 {currentRoom &&
-                    <React.Fragment><h2>You're chatting with {currentRoom.otherUser.username}</h2>
-                        <hr />
+                    <React.Fragment>
                         <ul>
                             {currentRoom.messages.map(message => (
                                 <li>
-                                    <text style={{ fontWeight: 'bold', }}>{message.senderUsername} : </text> {message.messageText}
+                                    {
+                                        message.senderUsername && (
+                                            <text style={{ fontWeight: 'bold', }}>  {message.senderUsername} :
+                                            </text>
+                                        )
+                                    }
+                                    {message.messageText}
                                 </li>
                             ))}
                         </ul>
-                        <div style={{ marginLeft: -20, marginRight: -20, marginBottom: -20, padding: 20, backgroundColor: "#EEE", display: 'flex', }}>
+                        <div className="chat-input" >
                             <input type="text" value={newMessage} onChange={this.changeMessage} style={{ flex: 1 }} placeholder="Type your message..." />
                             <button style={{ height: 31 }} onClick={this.sendMessage}>Send Message</button>
                         </div>

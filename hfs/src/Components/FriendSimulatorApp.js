@@ -51,7 +51,9 @@ export default class FriendSimulatorApp extends React.Component{
         } else {
             console.log("NEW ROOM ID: ");
             console.log(roomId);
-            this.setState({ currentRoom: { roomId, otherUser, messages: [] } });
+            this.setState({ currentRoom: { roomId, otherUser, messages: [] } }, () => {
+                this.new_message(`You are chatting with ${otherUser.username}. Say hi!`);
+            });
         }
     }
 
@@ -96,16 +98,6 @@ export default class FriendSimulatorApp extends React.Component{
             this.sleep(1000).then(() => { this.find_room() });
         }
     };
-
-    // roomErrorFunc = (error, code) => {
-    //     const { currentRoom } = this.state;
-    //     if (code === 1 && currentRoom === null) {
-    //         // we could not find any unmatched users so we will try again in 300 ms
-    //         this.sleep(1000).then(() => { this.find_room() });
-    //     } else {
-    //         this.errorFunc(error);
-    //     }
-    // }
 
     errorFunc = error => {
         console.log(error);
