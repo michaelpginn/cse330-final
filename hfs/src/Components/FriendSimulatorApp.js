@@ -118,24 +118,30 @@ export default class FriendSimulatorApp extends React.Component{
         const { connected, currentUsername, error, currentRoom } = this.state;
         return (
             <div style={{ display: "flex", height: "100vh", flexDirection: "column", }}>
-                <Header currentUsername={currentUsername}/>
+                <Header currentUsername={currentUsername} />
                 <div style={{ display: "flex", alignItems: "stretch", flex: 1 }}>
                     {currentUsername ? (
                         <React.Fragment>
                             {connected ? (
-                                <React.Fragment> 
-                                    {/* Connect to a room with a name 
-                                    {currentRoom ? currentRoom.roomId : currentUsername} */}
+                                <React.Fragment>
+                                    {currentRoom ? (
+                                        <React.Fragment>
+                                            {/* Connect to a room with a name */}
+                                            {console.log("excuse me: " + currentRoom)}
+                                            <SWRTC.Room name={currentRoom ? currentRoom.roomId : currentUsername} >
+                                                {() => {
+                                                    return <VideoScreen />
+                                                }}
+                                            </SWRTC.Room>
 
-                                    <SWRTC.Room name={currentRoom ? currentRoom.roomId : currentUsername} >
-                                        {({ room }) => {
-                                            console.log(`~~~~~~~CURRENTROOM (should have name ${currentRoom.roomId})~~~~~~~`);
-                                            console.log(room);
-                                            return <VideoScreen />;
-                                        }}
-                                    </SWRTC.Room>
-                            
-                                    <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} />
+                                            <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} />
+                                        </React.Fragment>
+                                    ) :
+                                        (
+                                            <div>Waiting to connect with another user...</div>
+                                        )
+                                    }
+                                    
                                 </React.Fragment>)
                                 :
                                 (<div>Could not connect to socket, server may not be running.</div>)}
