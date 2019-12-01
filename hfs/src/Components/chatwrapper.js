@@ -18,7 +18,7 @@ export default class ChatWrapper extends React.Component {
     };
 
     render() {
-        const { currentRoom } = this.props;
+        const { currentRoom, exit_room } = this.props;
         const { newMessage } = this.state;
         return (
             <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: 10 }}>
@@ -38,10 +38,12 @@ export default class ChatWrapper extends React.Component {
                             ))}
                         </ul>
                         <div className="chat-input" >
-                            <input type="text" value={newMessage} onChange={this.changeMessage} style={{ flex: 1 }} placeholder="Type your message..." />
-                            <button style={{ height: 31 }} onClick={this.sendMessage}>Send Message</button>
+                            <button className="big-button" onClick={exit_room}>Exit Chat<br/>(Esc)</button>
+                            <input type="text" value={newMessage} onChange={this.changeMessage} className="chat-textbox" placeholder="Type your message..." />
+                            <button className="big-button" onClick={this.sendMessage}>Send Message</button>
                         </div>
-                    </React.Fragment>}
+                    </React.Fragment>
+                }
             </div>
         );
     }

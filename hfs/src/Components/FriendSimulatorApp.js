@@ -128,7 +128,7 @@ export default class FriendSimulatorApp extends React.Component{
                                                 }}
                                             </SWRTC.Room>
 
-                                            <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} />
+                                            <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} exit_room={this.exit_room}/>
                                         </React.Fragment>
                                     ) :
                                         <React.Fragment>
