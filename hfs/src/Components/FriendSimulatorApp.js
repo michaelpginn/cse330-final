@@ -43,14 +43,14 @@ export default class FriendSimulatorApp extends React.Component{
     };
 
     room_changed = (roomId, otherUser) => {
-        console.log("room changed to ");
-        console.log(roomId);
         if (!roomId) {
             // we are not in a room now
             this.setState({ currentRoom: null });
             // ask for a new chat partner
             this.sleep(1000).then(() => { this.find_room() });
         } else {
+            console.log("NEW ROOM");
+            console.log(roomId);
             this.setState({ currentRoom: { roomId, otherUser, messages: [] } });
         }
     }
@@ -124,10 +124,14 @@ export default class FriendSimulatorApp extends React.Component{
                         <React.Fragment>
                             {connected ? (
                                 <React.Fragment> 
-                                    {/* Connect to a room with a name */}
+                                    {/* Connect to a room with a name 
+                                    {currentRoom ? currentRoom.roomId : currentUsername} */}
+
                                     <SWRTC.Room name={currentRoom ? currentRoom.roomId : currentUsername} >
-                                        {() => {
-                                            return <VideoScreen />
+                                        {({ room }) => {
+                                            console.log(`~~~~~~~CURRENTROOM (should have name ${currentRoom.roomId})~~~~~~~`);
+                                            console.log(room);
+                                            return <VideoScreen />;
                                         }}
                                     </SWRTC.Room>
                             
