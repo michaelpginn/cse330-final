@@ -130,12 +130,14 @@ io.sockets.on("connection", function (socket) {
 		let currentUserRating = 0;
 		if (currentUser.totalRatings !== 0) {
 			currentUserRating = currentUser.totalPoints / currentUser.totalRatings;
+			currentUserRating = Math.round(currentUserRating * 10) / 10;
 		}
 		let currentUserRate = { username: currentUser.username, rating: currentUserRating }
 		
 		let newChatRating = 0;
 		if (newChatPartner.totalRatings !== 0) {
 			newChatRating = newChatPartner.totalPoints / newChatPartner.totalRatings;
+			newChatRating = Math.round(newChatRating * 10) / 10;
 		}
 		let newChatPartnerRate = { username: newChatPartner.username, rating: newChatRating }
 
