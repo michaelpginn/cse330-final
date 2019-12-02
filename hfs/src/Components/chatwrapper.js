@@ -39,7 +39,7 @@ export default class ChatWrapper extends React.Component {
                         </ul>
                         <div className="chat-input" >
                             <button className="big-button" onClick={exit_room}>Exit Chat<br/>(Esc)</button>
-                            <input type="text" value={newMessage} onChange={this.changeMessage} className="chat-textbox" placeholder="Type your message..." />
+                            <input autoFocus type="text" value={newMessage} onChange={this.changeMessage} className="chat-textbox" placeholder="Type your message..." />
                             <button className="big-button" onClick={this.sendMessage}>Send Message</button>
                         </div>
                     </React.Fragment>
