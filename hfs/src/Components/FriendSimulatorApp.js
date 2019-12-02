@@ -5,6 +5,7 @@ import openSocket from 'socket.io-client';
 import ChatWrapper from "./chatwrapper";
 import VideoScreen from "./videoscreen";
 import LoginView from "./loginview";
+import Rating from "./rating";
 import "./components.css";
 import Header from "./header";
 import { INSTANCE_URL } from "../Instance"
@@ -49,10 +50,11 @@ export default class FriendSimulatorApp extends React.Component{
             // ask for a new chat partner
             this.sleep(1000).then(() => { this.find_room() });
         } else {
-            console.log("NEW ROOM ID: ");
-            console.log(roomId);
+            //console.log("NEW ROOM ID: ");
+            //console.log(roomId);
             this.setState({ currentRoom: { roomId, otherUser, messages: [] } }, () => {
                 this.new_message(`You are chatting with ${otherUser.username}. Say hi!`);
+                console.log(otherUser);
             });
         }
     }
@@ -84,6 +86,7 @@ export default class FriendSimulatorApp extends React.Component{
     };
 
     rate_user = rating => {
+        console.log("sending " + rating);
         this.socket.emit("rate_user", rating);
     };
 
@@ -122,13 +125,15 @@ export default class FriendSimulatorApp extends React.Component{
                                             {/* Connect to a room with a name */}
                                             <SWRTC.Room name={currentRoom.roomId} >
                                                 {({ room }) => {
-                                                    console.log("_______CURRENT ROOM_______");
-                                                    console.log(room);
+                                                    //console.log("_______CURRENT ROOM_______");
+                                                    //console.log(room);
                                                     return <VideoScreen />;
                                                 }}
                                             </SWRTC.Room>
-
-                                            <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} exit_room={this.exit_room}/>
+                                            <React.Fragment>
+                                                <Rating currentRoom={currentRoom} rate_user={this.rate_user} />
+                                                <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} exit_room={this.exit_room} />
+                                            </React.Fragment>
                                         </React.Fragment>
                                     ) :
                                         <React.Fragment>

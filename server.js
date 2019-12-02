@@ -59,7 +59,7 @@ io.sockets.on("connection", function (socket) {
 		if (users.find(user => user.username === username)) {
 			errorFunc("That username is taken.");
 		} else {
-			users.push({ username: username, socketId: socket.id, currentRoomId: null });
+			users.push({ username: username, socketId: socket.id, currentRoomId: null, totalPoints: 0, totalRatings: 0 });
 			errorFunc(null);
 		}
 	});
@@ -127,10 +127,16 @@ io.sockets.on("connection", function (socket) {
 		currentUser.currentRoomId = newRoomId;
 		newChatPartner.currentRoomId = newRoomId;
 
-		let currentUserRating = currentUser.totalPoints / currentUser.totalRatings;
+		let currentUserRating = 0;
+		if (currentUser.totalRatings !== 0) {
+			currentUserRating = currentUser.totalPoints / currentUser.totalRatings;
+		}
 		let currentUserRate = { username: currentUser.username, rating: currentUserRating }
 		
-		let newChatRating = newChatPartner.totalPoints / newChatPartner.totalRatings;
+		let newChatRating = 0;
+		if (newChatPartner.totalRatings !== 0) {
+			newChatRating = newChatPartner.totalPoints / newChatPartner.totalRatings;
+		}
 		let newChatPartnerRate = { username: newChatPartner.username, rating: newChatRating }
 
 		// tell both users that they are in a room
@@ -181,18 +187,20 @@ io.sockets.on("connection", function (socket) {
 	socket.on(events.Events.RATE_USER, function (rating) {
 		let currentUser = users.find(user => user.socketId === socket.id);
 		if (!currentUser) {
-			errorFunc("User has been logged out.");
+			//errorFunc("User has been logged out.");
+			console.log("Can't find user");
 			return;
 		}
 		// get the current room
 		const currentRoom = rooms.find(room => room.id === currentUser.currentRoomId);
 		if (!currentRoom) {
-			errorFunc("User is not currently in a room.");
+			//errorFunc("User is not currently in a room.");
+			console.log("can't find room")
 			return;
 		}
-
+		console.log("sent " + rating);
 		let otherUser = currentRoom.users.find(user => user.username !== currentUser.username);
-		otherUser.totalPoints = otherUser.totalPoints + rating;
+		otherUser.totalPoints = otherUser.totalPoints + parseInt(rating);
 		otherUser.totalRatings = otherUser.totalRatings + 1;
 	});
 
