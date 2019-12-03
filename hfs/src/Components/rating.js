@@ -1,14 +1,11 @@
 import React from "react";
+import StarRatingComponent from 'react-star-rating-component';
 
 export default class extends React.Component {
     constructor(props) {
         super(props);
         this.state = { rating: null, sent: false };
     }
-
-    changeRating = event => {
-        this.setState({ rating: event.target.value });
-    };
 
     rateUser = () => {
         const { rate_user } = this.props;
@@ -17,43 +14,43 @@ export default class extends React.Component {
         this.setState({ rating: null, sent: true });
     };
 
+    onStarClick = (nextValue, prevValue, name) => {
+        this.setState({ rating: nextValue });
+    };
+
     render() {
         const { currentRoom } = this.props;
         const { rating, sent } = this.state;
         return (
-            <div>
-                <div className="chat-input" >
-                    {sent ? (
-                    <div>
-                            {currentRoom && (<text style={{ fontSize: '2vh' }}>Rating Sent! </text>)}
-                            {currentRoom.otherUser.rating === 0 ?  (
-                                <text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: not yet rated</text>
-                            ) : (
-                                <text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: {currentRoom.otherUser.rating}</text>
-                            )
-                            }
-                    </div>
-                    ): (
-                    <div>
-                        {currentRoom && (<text style={{ fontSize: '2vh' }}>Rate {currentRoom.otherUser.username}:</text>)}
-                        <input type="radio" name="rating" id="one" value="1" onClick={this.changeRating} />1★
-                        <input type="radio" name="rating" id="two" value="2" onClick={this.changeRating} />2★
-                        <input type="radio" name="rating" id="three" value="3" onClick={this.changeRating} />3★
-                        <input type="radio" name="rating" id="four" value="4" onClick={this.changeRating} />4★
-                        <input type="radio" name="rating" id="five" value="5" onClick={this.changeRating} />5★
-                        <button className="big-button" onClick={this.rateUser}>Send Rating!</button>
-                        {currentRoom.otherUser.rating === 0 ? (
-                            <text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: not yet rated</text>
-                        ) : (
-                            <text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: {currentRoom.otherUser.rating}</text>
+            <div className="chat-input rating">
+                Current rating:
+                <div style={{ fontWeight: "bold", marginLeft: 4 }}>{currentRoom && currentRoom.otherUser.rating || "Not yet rated"}</div>
+                <div style={{flex:1}}/>
+                {currentRoom && (
+                    sent ? (
+                        <React.Fragment>
+                        Rating sent!
+                        </React.Fragment>
+                    ) : (
+                            <React.Fragment>
+                                Rate your conversation with {currentRoom.otherUser.username}:
+                                <div style={{width: 4}}/>
+                                <StarRatingComponent
+                                    name="Rating"
+                                    starCount={5}
+                                    value={rating}
+                                    onStarClick={this.onStarClick}
+                                />
+                                <div style={{width: 4}}/>
+                                <button onClick={this.rateUser}>Send Rating!</button>
+                                
+                            </React.Fragment>
                         )
-                        }
-                    </div>
-                        )}
+                )}
                 
-                </div>
-        </div>
-        )
+                
+            </div>
+        );
     }
     
 }

@@ -16,8 +16,9 @@ export default class FriendSimulatorApp extends React.Component{
         this.state = {
             connected: false,
             currentUsername: null,
-            currentRoom: null, //{roomId, otherUser: {username, rating}, messages: []}
-            error: null
+            currentRoom: null, //{roomId, otherUser: {username, rating, filter}, messages: []}
+            error: null,
+            myFilter: null
         }
     }
     componentDidMount = async () => {
@@ -26,7 +27,7 @@ export default class FriendSimulatorApp extends React.Component{
             this.socket.on('connect', this.connected);
             this.socket.on('room_changed', this.room_changed);
             this.socket.on('new_message', this.new_message);
-
+            this.socket.on('filter_changed', this.filter_changed);
             
         } catch (error) {
             console.log(error);
@@ -66,6 +67,16 @@ export default class FriendSimulatorApp extends React.Component{
         this.setState({ currentRoom: newRoom });
     };
 
+    filter_changed = (username, filter) => {
+        const { currentUsername, currentRoom } = this.state;
+        if (username === currentUsername) {
+            this.setState({ myFilter: filter });
+        } else {
+            const newRoom = { ...currentRoom, otherUser: { ...currentRoom.otherUser, filter: filter } };
+            this.setState({ currentRoom: newRoom });
+        }
+    }
+
     // emitter funcs
     set_username = username => {
         this.socket.emit("set_username", username, (error) => { this.usernameErrorFunc(error, username) });
@@ -90,6 +101,10 @@ export default class FriendSimulatorApp extends React.Component{
         this.socket.emit("rate_user", rating);
     };
 
+    set_filter = filter => {
+        this.socket.emit("set_filter", filter);
+    };
+
 
     usernameErrorFunc = (error, username) => {
         if (error) {
@@ -109,10 +124,11 @@ export default class FriendSimulatorApp extends React.Component{
     }
 
     render() {
-        const { connected, currentUsername, error, currentRoom } = this.state;
+        const { connected, currentUsername, error, currentRoom, myFilter } = this.state;
         return (
             <div style={{ display: "flex", height: "100vh", flexDirection: "column", }}>
                 <Header currentUsername={currentUsername} />
+
                 <div style={{ display: "flex", alignItems: "stretch", flex: 1 }}>
                     {currentUsername ? (
                         <React.Fragment>
@@ -124,21 +140,18 @@ export default class FriendSimulatorApp extends React.Component{
                                             <SWRTC.RequestUserMedia audio video auto share />
                                             {/* Connect to a room with a name */}
                                             <SWRTC.Room name={currentRoom.roomId} >
-                                                {({ room }) => {
-                                                    //console.log("_______CURRENT ROOM_______");
-                                                    //console.log(room);
-                                                    return <VideoScreen />;
+                                                {() => {
+                                                    return <VideoScreen myFilter={myFilter} otherFilter={currentRoom.otherUser.filter} set_filter={this.set_filter} />;
                                                 }}
                                             </SWRTC.Room>
-                                            <React.Fragment>
+                                            <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: 10 }}>
                                                 <Rating currentRoom={currentRoom} rate_user={this.rate_user} />
                                                 <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} exit_room={this.exit_room} />
-                                            </React.Fragment>
+                                            </div>
                                         </React.Fragment>
                                     ) :
                                         <React.Fragment>
                                             <div>Searching for chat partner...</div>
-                                            
                                         </React.Fragment>
                                     }
                                     

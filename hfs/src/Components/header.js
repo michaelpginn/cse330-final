@@ -6,7 +6,7 @@ export default function Header(props) {
         <header>
             Having Friends Simulator
             <div style={{ flex: 1 }} />
-            {currentUsername && (<text style={{fontSize: '3vh'}}>Hello, {currentUsername}</text>)}
+            {currentUsername && (<div style={{fontSize: '3vh'}}>Hello, {currentUsername}</div>)}
         </header>
     )
 }

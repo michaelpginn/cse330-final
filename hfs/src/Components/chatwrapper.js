@@ -17,16 +17,26 @@ export default class ChatWrapper extends React.Component {
         this.setState({ newMessage: "" });
     };
 
+    handleKeyPress = (event) => {
+        const { exit_room } = this.props;
+
+        if (event.key === "Enter") {
+            this.sendMessage();
+        } else if (event.keyCode === 27) {
+            exit_room();
+        }
+    }
+
     render() {
         const { currentRoom, exit_room } = this.props;
         const { newMessage } = this.state;
         return (
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: 10 }}>
+            <React.Fragment>
                 {currentRoom &&
                     <React.Fragment>
                         <ul>
-                            {currentRoom.messages.map(message => (
-                                <li>
+                            {currentRoom.messages.map((message, index) => (
+                                <li key={index}>
                                     {
                                         message.senderUsername && (
                                             <text style={{ fontWeight: 'bold', }}>  {message.senderUsername} :
@@ -38,13 +48,13 @@ export default class ChatWrapper extends React.Component {
                             ))}
                         </ul>
                         <div className="chat-input" >
-                            <button className="big-button" onClick={exit_room}>Exit Chat<br/>(Esc)</button>
-                            <input autoFocus type="text" value={newMessage} onChange={this.changeMessage} className="chat-textbox" placeholder="Type your message..." />
+                            <button className="big-button" onClick={exit_room}>Exit Chat<br />(Esc)</button>
+                            <input autoFocus type="text" value={newMessage} onChange={this.changeMessage} className="chat-textbox" placeholder="Type your message..." onKeyPress={this.handleKeyPress} />
                             <button className="big-button" onClick={this.sendMessage}>Send Message</button>
                         </div>
                     </React.Fragment>
                 }
-            </div>
+            </React.Fragment>
         );
     }
 }

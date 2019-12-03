@@ -23,11 +23,12 @@ ul{
     overflow-y: scroll;
     flex:1;
     list-style-type: none;
-    padding: 20px;
+    padding: 15px;
     margin: 0;
     padding-top: 10px;
     background-color: white;
     margin-bottom: 10px;
+    margin-top: 10px;
     border: 1px solid #AAA;
     border-radius: 2px;
 }
@@ -43,6 +44,10 @@ li{
     display: flex;
     align-items: stretch;
 }
+.rating {
+    align-items: center;
+    height: 30px;
+}
 .big-button{
     height: 50px;
 }
@@ -51,93 +56,57 @@ li{
     margin-left: 10px;
     margin-right: 10px;
 }
-.red-filter:before{
-    content:"";
+.vid-div{
+    flex:1;
+    overflow: hidden;
+    position: relative;
+    z-index: 0;
+}
+.filter-box {
     position: absolute;
-    top:0;
-    right:0;
+    width: 100%;
+    height: 100%;
+    top: 0;
     left:0;
-    bottom:0;
     z-index:1;
+}
+.red-filter{ 
     background:linear-gradient(to right,rgba(255, 0, 0, 0.4),rgba(255, 0, 0, 0.4));
 }
-.red-filter{
-    left: 0%;
-    top: 0%;
-    width: 62vh;
-    overflow: hidden;
-    position: relative;
-    z-index: -1;
-}
-.blue-filter:before{
-    content:"";
-    position: absolute;
-    top:0;
-    right:0;
-    left:0;
-    bottom:0;
-    z-index:1;
+
+.blue-filter{
     background:linear-gradient(to right,rgba(19, 94, 255, 0.4),rgba(19, 94, 255, 0.4));
 }
-.blue-filter{
-    left: 0%;
-    top: 0%;
-    width: 62vh;
-    overflow: hidden;
-    position: relative;
-    z-index: -1;
-}
-.green-filter:before{
-    content:"";
-    position: absolute;
-    top:0;
-    right:0;
-    left:0;
-    bottom:0;
-    z-index:1;
+
+.green-filter{
     background:linear-gradient(to right,rgba(0, 247, 111, 0.4),rgba(0, 247, 111, 0.4));
 }
-.green-filter{
-    left: 0%;
-    top: 0%;
-    width: 62vh;
-    overflow: hidden;
-    position: relative;
-    z-index: -1;
-}
-.warm-filter:before{
-    content:"";
-    position: absolute;
-    top:0;
-    right:0;
-    left:0;
-    bottom:0;
-    z-index:1;
+
+.warm-filter{
     background:linear-gradient(to right,rgba(255, 29, 29, 0.4),rgba(255, 235, 51, 0.4));
 }
-.warm-filter{
-    left: 0%;
-    top: 0%;
-    width: 62vh;
-    overflow: hidden;
-    position: relative;
-    z-index: -1;
-}
-.cool-filter:before{
-    content:"";
-    position: absolute;
-    top:0;
-    right:0;
-    left:0;
-    bottom:0;
-    z-index:1;
+
+.cool-filter{
     background:linear-gradient(to right,rgba(132, 0, 255, 0.4),rgba(0, 195, 255, 0.4));
 }
-.cool-filter{
-    left: 0%;
-    top: 0%;
-    width: 62vh;
-    overflow: hidden;
-    position: relative;
-    z-index: -1;
+.filter-picker-bg{
+    background-color: rgba(0,0,0,0.8);
+    width: 100%;
+    height: 100%;
+    display:flex;
+    flex-direction: column;
+}
+.translucent-button{
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    flex:1;
+    margin: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    font-size: large;
+}
+.translucent-button:active{
+    opacity: 0.5;
 }

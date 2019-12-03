@@ -1,5 +1,5 @@
 import React from 'react';
-import { Video, VolumeMeter, Volume } from '@andyet/simplewebrtc';
+import { Video } from '@andyet/simplewebrtc';
 import styled from 'styled-components';
 
 import "./components.css";
@@ -11,7 +11,7 @@ const NoVideo = styled.div({
 })
 
 const Container = styled.div({
-    height: '50%',
+    height: '100%',
     '& video': {
         width: '100%',
         height: '100%',

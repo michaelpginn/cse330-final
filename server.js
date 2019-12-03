@@ -3,7 +3,8 @@ const https = require("https"),
 	socketio = require("socket.io"),
 	fs = require("fs"),
 	mime = require('mime'),
-	events = require("./events");
+	events = require("./events"),
+	filters = require("./filters");
 	
 // https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/
 
@@ -45,7 +46,7 @@ var app = https.createServer(options, function(req, resp){
 app.listen(8000);
 console.log('Server running at http://localhost:8000/');
 
-let users = []; // [{username, socketId, currentRoomId, totalPoints, totalRatings}]
+let users = []; // [{username, socketId, currentRoomId, totalPoints, totalRatings, currentFilter}]
 // Not sure if we need the rooms array
 let rooms = []; // [{id, users:[]}]
 
@@ -132,18 +133,18 @@ io.sockets.on("connection", function (socket) {
 			currentUserRating = currentUser.totalPoints / currentUser.totalRatings;
 			currentUserRating = Math.round(currentUserRating * 10) / 10;
 		}
-		let currentUserRate = { username: currentUser.username, rating: currentUserRating }
+		let currentUserResp = { username: currentUser.username, rating: currentUserRating, filter: currentUser.filter }
 		
 		let newChatRating = 0;
 		if (newChatPartner.totalRatings !== 0) {
 			newChatRating = newChatPartner.totalPoints / newChatPartner.totalRatings;
 			newChatRating = Math.round(newChatRating * 10) / 10;
 		}
-		let newChatPartnerRate = { username: newChatPartner.username, rating: newChatRating }
+		let newChatPartnerResp = { username: newChatPartner.username, rating: newChatRating, filter: newChatPartner.filter }
 
 		// tell both users that they are in a room
-		io.to(currentUser.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, newChatPartnerRate);
-		io.to(newChatPartner.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, currentUserRate);
+		io.to(currentUser.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, newChatPartnerResp);
+		io.to(newChatPartner.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, currentUserResp);
 	})
 
 	// Send a message
@@ -166,23 +167,25 @@ io.sockets.on("connection", function (socket) {
 		});
 	});
 
-	// send image message
-	socket.on(events.Events.SEND_IMAGE_MESSAGE, function (imageDataUrl, errorFunc) {
+	socket.on(events.Events.SET_FILTER, function (filter) {
 		let currentUser = users.find(user => user.socketId === socket.id);
 		if (!currentUser) {
-			errorFunc("User has been logged out.");
+			//errorFunc("User has been logged out.");
+			console.log("Can't find user");
 			return;
 		}
+		currentUser.filter = filter;
 		// get the current room
 		const currentRoom = rooms.find(room => room.id === currentUser.currentRoomId);
 		if (!currentRoom) {
-			errorFunc("User is not currently in a room.");
+			//errorFunc("User is not currently in a room.");
+			console.log("can't find room")
 			return;
 		}
 
 		// send it to the current room
 		currentRoom.users.forEach(user => {
-			io.to(user.socketId).emit(events.Events.NEW_IMAGE_MESSAGE, imageDataUrl, currentUser.username);
+			io.to(user.socketId).emit(events.Events.FILTER_CHANGED, currentUser.username, filter);
 		});
 	});
 
