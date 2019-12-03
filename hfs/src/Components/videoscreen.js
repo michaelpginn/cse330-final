@@ -21,7 +21,6 @@ export default class VideoScreen extends React.Component {
     render() {
         const { myFilter, otherFilter} = this.props;
         const { pickingFilter } = this.state;
-        //const myFilter = "red-filter"
         return (
             <div style={{ display: "flex", flexDirection: "column", width: '62vh' }}>
                 
