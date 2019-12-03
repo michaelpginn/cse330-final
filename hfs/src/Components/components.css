@@ -51,3 +51,93 @@ li{
     margin-left: 10px;
     margin-right: 10px;
 }
+.red-filter:before{
+    content:"";
+    position: absolute;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    z-index:1;
+    background:linear-gradient(to right,rgba(255, 0, 0, 0.4),rgba(255, 0, 0, 0.4));
+}
+.red-filter{
+    left: 0%;
+    top: 0%;
+    width: 62vh;
+    overflow: hidden;
+    position: relative;
+    z-index: -1;
+}
+.blue-filter:before{
+    content:"";
+    position: absolute;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    z-index:1;
+    background:linear-gradient(to right,rgba(19, 94, 255, 0.4),rgba(19, 94, 255, 0.4));
+}
+.blue-filter{
+    left: 0%;
+    top: 0%;
+    width: 62vh;
+    overflow: hidden;
+    position: relative;
+    z-index: -1;
+}
+.green-filter:before{
+    content:"";
+    position: absolute;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    z-index:1;
+    background:linear-gradient(to right,rgba(0, 247, 111, 0.4),rgba(0, 247, 111, 0.4));
+}
+.green-filter{
+    left: 0%;
+    top: 0%;
+    width: 62vh;
+    overflow: hidden;
+    position: relative;
+    z-index: -1;
+}
+.warm-filter:before{
+    content:"";
+    position: absolute;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    z-index:1;
+    background:linear-gradient(to right,rgba(255, 29, 29, 0.4),rgba(255, 235, 51, 0.4));
+}
+.warm-filter{
+    left: 0%;
+    top: 0%;
+    width: 62vh;
+    overflow: hidden;
+    position: relative;
+    z-index: -1;
+}
+.cool-filter:before{
+    content:"";
+    position: absolute;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    z-index:1;
+    background:linear-gradient(to right,rgba(132, 0, 255, 0.4),rgba(0, 195, 255, 0.4));
+}
+.cool-filter{
+    left: 0%;
+    top: 0%;
+    width: 62vh;
+    overflow: hidden;
+    position: relative;
+    z-index: -1;
+}
