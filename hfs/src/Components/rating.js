@@ -25,8 +25,13 @@ export default class extends React.Component {
                 <div className="chat-input" >
                     {sent ? (
                     <div>
-                        {currentRoom && (<text style={{ fontSize: '2vh' }}>Rating Sent! </text>)}
-                        {currentRoom && (<text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: {currentRoom.otherUser.rating}</text>)}
+                            {currentRoom && (<text style={{ fontSize: '2vh' }}>Rating Sent! </text>)}
+                            {currentRoom.otherUser.rating === 0 ?  (
+                                <text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: not yet rated</text>
+                            ) : (
+                                <text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: {currentRoom.otherUser.rating}</text>
+                            )
+                            }
                     </div>
                     ): (
                     <div>
@@ -37,7 +42,12 @@ export default class extends React.Component {
                         <input type="radio" name="rating" id="four" value="4" onClick={this.changeRating} />4★
                         <input type="radio" name="rating" id="five" value="5" onClick={this.changeRating} />5★
                         <button className="big-button" onClick={this.rateUser}>Send Rating!</button>
-                        {currentRoom && (<text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: {currentRoom.otherUser.rating}</text>)}
+                        {currentRoom.otherUser.rating === 0 ? (
+                            <text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: not yet rated</text>
+                        ) : (
+                            <text style={{ fontSize: '2vh' }}>{currentRoom.otherUser.username}'s Current Rating: {currentRoom.otherUser.rating}</text>
+                        )
+                        }
                     </div>
                         )}
                 
