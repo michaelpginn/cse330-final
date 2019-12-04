@@ -27,6 +27,7 @@ export default class FriendSimulatorApp extends React.Component{
             this.socket.on('connect', this.connected);
             this.socket.on('room_changed', this.room_changed);
             this.socket.on('new_message', this.new_message);
+            this.socket.on('new_gif_message', this.new_gif_message);
             this.socket.on('filter_changed', this.filter_changed);
             
         } catch (error) {
@@ -70,6 +71,8 @@ export default class FriendSimulatorApp extends React.Component{
     new_gif_message = (gifCode, senderUsername) => {
         const { currentRoom } = this.state;
         const newMessage = { senderUsername, gifCode };
+        console.log("new gif message received");
+        console.log(newMessage);
         const newRoom = { ...currentRoom, messages: [...currentRoom.messages, newMessage] };
         this.setState({ currentRoom: newRoom });
     };

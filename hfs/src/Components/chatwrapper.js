@@ -1,13 +1,14 @@
 import React from "react";
 import MemeTray from "./memetray";
+import GifImage from "./gifimage";
+
 
 
 export default class ChatWrapper extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            newMessage: "",
-            gifCode: null
+            newMessage: ""
         };
     }
 
@@ -22,13 +23,6 @@ export default class ChatWrapper extends React.Component {
         this.setState({ newMessage: "" });
     };
 
-    sendGifMessage = () => {
-        const { send_gif_message } = this.props;
-        const { gifCode } = this.state;
-        send_gif_message(gifCode);
-        this.setState({ gifCode: null });
-    }
-
     handleKeyPress = (event) => {
         const { exit_room } = this.props;
 
@@ -39,8 +33,10 @@ export default class ChatWrapper extends React.Component {
         }
     }
 
+    
+
     render() {
-        const { currentRoom, exit_room } = this.props;
+        const { currentRoom, exit_room, send_gif_message } = this.props;
         const { newMessage } = this.state;
         return (
             <React.Fragment>
@@ -55,7 +51,7 @@ export default class ChatWrapper extends React.Component {
                                             </text>
                                         )
                                     }
-                                    {message.messageText}
+                                    {message.messageText ? message.messageText : <GifImage gifCode={message.gifCode}/>}
                                 </li>
                             ))}
                         </ul>
@@ -66,7 +62,7 @@ export default class ChatWrapper extends React.Component {
                     </div>
                     <div style={{height: 10}}/>
                     <div className="chat-input" style={{height: 52}}>
-                        <MemeTray/>
+                        <MemeTray send_gif_message={send_gif_message}/>
                     </div>
                     </React.Fragment>
                 }
@@ -74,3 +70,4 @@ export default class ChatWrapper extends React.Component {
         );
     }
 }
+
