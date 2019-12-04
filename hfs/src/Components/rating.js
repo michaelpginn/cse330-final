@@ -24,7 +24,7 @@ export default class extends React.Component {
         return (
             <div className="chat-input rating">
                 Current rating:
-                <div style={{ fontWeight: "bold", marginLeft: 4 }}>{currentRoom && currentRoom.otherUser.rating || "Not yet rated"}</div>
+                <div style={{ fontWeight: "bold", marginLeft: 4 }}>{currentRoom && (currentRoom.otherUser.rating || "Not yet rated")}</div>
                 <div style={{flex:1}}/>
                 {currentRoom && (
                     sent ? (

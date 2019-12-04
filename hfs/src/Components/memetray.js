@@ -37,7 +37,7 @@ function MemeButton(props) {
     const { image, onClick } = props;
     return (
         <div style={{ width: 100, display: "flex", justifyContent: "center", marginRight: 10 }} onClick={onClick}>
-            <img src={image} style={{ maxHeight: "100%", maxWidth: "100%"}}/>
+            <img src={image} style={{ maxHeight: "100%", maxWidth: "100%" }} alt="Meme choice"/>
         </div>
     )
 }
