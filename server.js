@@ -138,6 +138,11 @@ io.sockets.on("connection", function (socket) {
 		currentUser.currentRoomId = newRoomId;
 		newChatPartner.currentRoomId = newRoomId;
 
+		// Comment out these lines if we want to allow you to match with the same person twice
+		currentUser.lastPartnerUsername = newChatPartner.username;
+		newChatPartner.lastPartnerUsername = currentUser.username;
+
+		// Generate ratings
 		let currentUserRating = 0;
 		if (currentUser.totalRatings !== 0) {
 			currentUserRating = currentUser.totalPoints / currentUser.totalRatings;
