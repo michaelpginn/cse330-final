@@ -165,7 +165,7 @@ export default class FriendSimulatorApp extends React.Component{
                                         </React.Fragment>
                                     ) :
                                         <React.Fragment>
-                                            <div>Searching for chat partner...</div>
+                                            <div style={{margin: 20}}>Searching for chat partner...</div>
                                         </React.Fragment>
                                     }
                                     

@@ -30,5 +30,5 @@ export default function GifImage(props) {
         default:
             break;
     }
-    return <img src={image} style={{ width: 'auto', height: '20vh' }}/>
+    return <img src={image} style={{ width: 'auto', height: '20vh', borderRadius: 5 }} alt="User sent gif"/>
 }

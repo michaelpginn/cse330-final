@@ -44,11 +44,11 @@ export default class ChatWrapper extends React.Component {
                     <React.Fragment>
                         <ul>
                             {currentRoom.messages.map((message, index) => (
-                                <li key={index}>
+                                <li key={index} style={{display: "flex"}}>
                                     {
                                         message.senderUsername && (
-                                            <text style={{ fontWeight: 'bold', }}>  {message.senderUsername} :
-                                            </text>
+                                            <div style={{ fontWeight: 'bold', marginRight: 4}}>  {message.senderUsername}:
+                                            </div>
                                         )
                                     }
                                     {message.messageText ? message.messageText : <GifImage gifCode={message.gifCode}/>}
@@ -56,7 +56,7 @@ export default class ChatWrapper extends React.Component {
                             ))}
                         </ul>
                         <div className="chat-input" >
-                            <button className="big-button" onClick={exit_room}>Exit Chat<br />(Esc)</button>
+                            <button className="big-button" onClick={exit_room}>Exit Chat</button>
                             <input autoFocus type="text" value={newMessage} onChange={this.changeMessage} className="chat-textbox" placeholder="Type your message..." onKeyPress={this.handleKeyPress} />
                             <button className="big-button" onClick={this.sendMessage}>Send Message</button>
                     </div>
