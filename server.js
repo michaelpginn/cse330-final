@@ -182,6 +182,26 @@ io.sockets.on("connection", function (socket) {
 		});
 	});
 
+	// Send a message
+	socket.on(events.Events.SEND_GIF_MESSAGE, function (gifCode, errorFunc) {
+		let currentUser = users.find(user => user.socketId === socket.id);
+		if (!currentUser) {
+			errorFunc("User has been logged out.");
+			return;
+		}
+		// get the current room
+		const currentRoom = rooms.find(room => room.id === currentUser.currentRoomId);
+		if (!currentRoom) {
+			errorFunc("User is not currently in a room.");
+			return;
+		}
+
+		// send it to the current room
+		currentRoom.users.forEach(user => {
+			io.to(user.socketId).emit(events.Events.NEW_GIF_MESSAGE, gifCode, currentUser.username);
+		});
+	});
+
 	socket.on(events.Events.SET_FILTER, function (filter) {
 		let currentUser = users.find(user => user.socketId === socket.id);
 		if (!currentUser) {
