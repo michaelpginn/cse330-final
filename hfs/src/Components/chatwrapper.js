@@ -1,4 +1,6 @@
 import React from "react";
+import MemeTray from "./memetray";
+
 
 export default class ChatWrapper extends React.Component {
     constructor(props) {
@@ -51,7 +53,11 @@ export default class ChatWrapper extends React.Component {
                             <button className="big-button" onClick={exit_room}>Exit Chat<br />(Esc)</button>
                             <input autoFocus type="text" value={newMessage} onChange={this.changeMessage} className="chat-textbox" placeholder="Type your message..." onKeyPress={this.handleKeyPress} />
                             <button className="big-button" onClick={this.sendMessage}>Send Message</button>
-                        </div>
+                    </div>
+                    <div style={{height: 10}}/>
+                    <div className="chat-input" style={{height: 52}}>
+                        <MemeTray/>
+                    </div>
                     </React.Fragment>
                 }
             </React.Fragment>

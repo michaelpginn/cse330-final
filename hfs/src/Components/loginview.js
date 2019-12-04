@@ -21,7 +21,7 @@ export default class LoginView extends React.Component {
         const { set_username } = this.props;
         const { username, interest } = this.state;
         return (
-            <div class="login-card">
+            <div className="login-card">
                 <h3>Login</h3>
                 <hr style={{ marginBottom: 20, marginTop: 40 }} />
                 Choose a username to use for this session.
