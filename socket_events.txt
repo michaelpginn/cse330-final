@@ -3,7 +3,7 @@
 
 EVENTS FOR CLIENT TO SEND
 
-"set_username", (username, errorFunc:(error:String)=>{})
+"set_username", (username, interest, errorFunc:(error:String)=>{})
 Called by client to set username for current user. Takes a callback function which the server passes a string if there is an error. Error could be 1) username is taken
 Usage: socket.emit("set_username", (error)=>{if (error) ...}). If username is taken keep trying.
 

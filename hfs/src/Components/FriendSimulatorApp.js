@@ -44,7 +44,7 @@ export default class FriendSimulatorApp extends React.Component{
         this.setState({ connected: true });
     };
 
-    room_changed = (roomId, otherUser) => {
+    room_changed = (roomId, otherUser, sharedInterest) => {
         if (!roomId) {
             // we are not in a room now
             this.setState({ currentRoom: null });
@@ -54,7 +54,7 @@ export default class FriendSimulatorApp extends React.Component{
             //console.log("NEW ROOM ID: ");
             //console.log(roomId);
             this.setState({ currentRoom: { roomId, otherUser, messages: [] } }, () => {
-                this.new_message(`You are chatting with ${otherUser.username}. Say hi!`);
+                this.new_message(`You are chatting with ${otherUser.username}. Say hi!${sharedInterest ? `  You both like ${sharedInterest}.` : ""}`);
                 console.log(otherUser);
             });
         }
@@ -78,8 +78,8 @@ export default class FriendSimulatorApp extends React.Component{
     }
 
     // emitter funcs
-    set_username = username => {
-        this.socket.emit("set_username", username, (error) => { this.usernameErrorFunc(error, username) });
+    set_username = (username, interest) => {
+        this.socket.emit("set_username", username, interest, (error) => { this.usernameErrorFunc(error, username) });
     };
 
     send_message = (messageText) => {
@@ -161,7 +161,7 @@ export default class FriendSimulatorApp extends React.Component{
                         </React.Fragment>
                     )
                         : (
-                            <div>
+                            <div style={{flex:1}}>
                                 <LoginView set_username={this.set_username} />
                                 {error &&
                                     <p>{error}</p>

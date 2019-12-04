@@ -46,7 +46,7 @@ var app = https.createServer(options, function(req, resp){
 app.listen(8000);
 console.log('Server running at http://localhost:8000/');
 
-let users = []; // [{username, socketId, currentRoomId, totalPoints, totalRatings, currentFilter}]
+let users = []; // [{username, socketId, currentRoomId, totalPoints, totalRatings, currentFilter, lastPartnerUsername}]
 // Not sure if we need the rooms array
 let rooms = []; // [{id, users:[]}]
 
@@ -56,11 +56,11 @@ io.sockets.on("connection", function (socket) {
 	console.log("connected to socket");
 
 	// set the username for the current socket
-	socket.on(events.Events.SET_USERNAME, function (username, errorFunc) {
+	socket.on(events.Events.SET_USERNAME, function (username, interest, errorFunc) {
 		if (users.find(user => user.username === username)) {
 			errorFunc("That username is taken.");
 		} else {
-			users.push({ username: username, socketId: socket.id, currentRoomId: null, totalPoints: 0, totalRatings: 0 });
+			users.push({ username, socketId: socket.id, currentRoomId: null, totalPoints: 0, totalRatings: 0, interest, lastPartnerUsername: null });
 			errorFunc(null);
 		}
 	});
@@ -108,19 +108,29 @@ io.sockets.on("connection", function (socket) {
 			return;
 		}
 
-		let openUsers = users.filter(user => user.currentRoomId === null && user.username !== currentUser.username);
+		let openUsers = users.filter(user => user.currentRoomId === null && user.username !== currentUser.username && user.username !== currentUser.lastPartnerUsername);
 		if (openUsers.length === 0) {
 			// they wil have to try again soon
 			errorFunc("No open users", 1);
 			return;
 		}
-		
-		// randomly select one of these unmatched users
-		const randomIndex = Math.floor(Math.random() * openUsers.length);
-		const newChatPartner = openUsers[randomIndex];
 
-		console.log(openUsers);
-		console.log(randomIndex);
+		let newChatPartner;
+		let sharedInterest = null;
+
+		// check if any of them have the same interest
+		let interestUsers = openUsers.filter(user => user.interest !== null && user.interest === currentUser.interest);
+		if (interestUsers.length === 0) {
+			// randomly select one of any unmatched users
+			const randomIndex = Math.floor(Math.random() * openUsers.length);
+			newChatPartner = openUsers[randomIndex];
+		} else {
+			// randomly select one of these users with the same interest 
+			const randomIndex = Math.floor(Math.random() * interestUsers.length);
+			newChatPartner = interestUsers[randomIndex];
+			sharedInterest = currentUser.interest;
+		}
+
 		// create the new room for both users, the id is their usernames squished together
 		const newRoomId = currentUser.username + newChatPartner.username;
 		const newRoom = { id: newRoomId, users: [currentUser, newChatPartner] };
@@ -143,8 +153,8 @@ io.sockets.on("connection", function (socket) {
 		let newChatPartnerResp = { username: newChatPartner.username, rating: newChatRating, filter: newChatPartner.filter }
 
 		// tell both users that they are in a room
-		io.to(currentUser.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, newChatPartnerResp);
-		io.to(newChatPartner.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, currentUserResp);
+		io.to(currentUser.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, newChatPartnerResp, sharedInterest);
+		io.to(newChatPartner.socketId).emit(events.Events.ROOM_CHANGED, newRoomId, currentUserResp, sharedInterest);
 	})
 
 	// Send a message

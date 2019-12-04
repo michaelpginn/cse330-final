@@ -41,12 +41,14 @@ export default class VideoScreen extends React.Component {
                         {
                             pickingFilter ? (
                                 <div class="filter-picker-bg">
+                                    <div style={{height: 5}}/>
                                     <button class="translucent-button" onClick={this.setFilter(filters.Filters.RED)}>Red</button>
                                     <button class="translucent-button" onClick={this.setFilter(filters.Filters.GREEN)}>Green</button>
                                     <button class="translucent-button" onClick={this.setFilter(filters.Filters.BLUE)}>Blue</button>
                                     <button class="translucent-button" onClick={this.setFilter(filters.Filters.WARM)}>Warm</button>
                                     <button class="translucent-button" onClick={this.setFilter(filters.Filters.COOL)}>Cool</button>
                                     <button class="translucent-button" onClick={this.setFilter(null)}>No Filter</button>
+                                    <div style={{height: 5}}/>
                                 </div>
                             ): (
                                 <button onClick={()=>{this.setState({pickingFilter: true})}}>Pick filter</button>
