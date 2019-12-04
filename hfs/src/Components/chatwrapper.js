@@ -5,7 +5,10 @@ import MemeTray from "./memetray";
 export default class ChatWrapper extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { newMessage: "" };
+        this.state = {
+            newMessage: "",
+            gifCode: null
+        };
     }
 
     changeMessage = event => {
@@ -18,6 +21,13 @@ export default class ChatWrapper extends React.Component {
         send_message(newMessage);
         this.setState({ newMessage: "" });
     };
+
+    sendGifMessage = () => {
+        const { send_gif_message } = this.props;
+        const { gifCode } = this.state;
+        send_gif_message(gifCode);
+        this.setState({ gifCode: null });
+    }
 
     handleKeyPress = (event) => {
         const { exit_room } = this.props;

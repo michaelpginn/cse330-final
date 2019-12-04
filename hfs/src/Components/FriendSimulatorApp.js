@@ -67,6 +67,13 @@ export default class FriendSimulatorApp extends React.Component{
         this.setState({ currentRoom: newRoom });
     };
 
+    new_gif_message = (gifCode, senderUsername) => {
+        const { currentRoom } = this.state;
+        const newMessage = { senderUsername, gifCode };
+        const newRoom = { ...currentRoom, messages: [...currentRoom.messages, newMessage] };
+        this.setState({ currentRoom: newRoom });
+    };
+
     filter_changed = (username, filter) => {
         const { currentUsername, currentRoom } = this.state;
         if (username === currentUsername) {
@@ -84,6 +91,10 @@ export default class FriendSimulatorApp extends React.Component{
 
     send_message = (messageText) => {
         this.socket.emit("send_message", messageText, this.errorFunc);
+    };
+
+    send_gif_message = (gifCode) => {
+        this.socket.emit("send_gif_message", gifCode, this.errorFunc);
     };
 
     exit_room = () => {
@@ -146,7 +157,7 @@ export default class FriendSimulatorApp extends React.Component{
                                             </SWRTC.Room>
                                             <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: 10 }}>
                                                 <Rating currentRoom={currentRoom} rate_user={this.rate_user} />
-                                                <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} exit_room={this.exit_room} />
+                                                <ChatWrapper currentRoom={currentRoom} send_message={this.send_message} send_gif_message={this.send_gif_message} exit_room={this.exit_room} />
                                             </div>
                                         </React.Fragment>
                                     ) :
